@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>福岡由布院．森之旅 🌿</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* --- 森林系色票 --- */
+        :root {
+            --dark: #132A13;       /* 深綠：文字、重點 */
+            --forest: #31572C;     /* 森林綠：標題、按鈕 */
+            --moss: #4F772D;       /* 苔綠：次要元素 */
+            --olive: #90A955;      /* 橄欖綠：裝飾、線條 */
+            --pale: #ECF39E;       /* 嫩綠：背景亮部 */
+            --paper: #F9F9F7;      /* 米白：模擬紙張背景 */
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "STHeiti", sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--paper);
+            color: var(--dark);
+            padding-bottom: 100px;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* --- Header 設計 --- */
+        header {
+            background: linear-gradient(135deg, var(--dark), var(--forest));
+            color: var(--pale);
+            padding: 30px 20px 50px;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(19, 42, 19, 0.15);
+        }
+        header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
+        header p { margin: 10px 0 0; font-size: 0.9rem; opacity: 0.9; color: var(--olive); }
+        .trip-tag {
+            display: inline-block;
+            background: rgba(236, 243, 158, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 0.8rem;
+            border: 1px solid var(--olive);
+        }
+
+        /* --- 內容區塊與動畫 --- */
+        .content-section {
+            display: none;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 0.4s ease;
+        }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- 通用卡片風格 (雜誌感) --- */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(144, 169, 85, 0.2);
+            position: relative;
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            color: var(--forest);
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .card-header i { margin-right: 8px; color: var(--moss); }
+        .card-desc { font-size: 0.95rem; line-height: 1.6; color: #555; }
+        
+        /* 虛線分隔 */
+        .dashed-line {
+            border-top: 2px dashed var(--olive);
+            margin: 15px 0;
+            opacity: 0.3;
+        }
+
+        /* 按鈕連結 */
+        .btn-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .btn-map {
+            display: inline-block;
+            margin-top: 12px;
+            background-color: var(--paper);
+            color: var(--forest);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            border: 1px solid var(--olive);
+        }
+
+        /* --- 行程表特定樣式 --- */
+        .day-badge {
+            background: var(--forest);
+            color: var(--pale);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            margin: 30px 0 10px;
+            box-shadow: 3px 3px 0px var(--olive);
+        }
+        .timeline-item {
+            padding-left: 20px;
+            border-left: 2px dashed var(--olive);
+            margin-left: 10px;
+            padding-bottom: 20px;
+            position: relative;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background: var(--pale);
+            border: 2px solid var(--forest);
+            border-radius: 50%;
+        }
+
+        /* --- 由布院地圖 (街道視覺化) --- */
+        .yufuin-street-container {
+            position: relative;
+            padding: 40px 0;
+            margin-top: 20px;
+        }
+        /* 中央街道線 */
+        .street-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 8px;
+            background-color: var(--olive); /* 像圖中的紅色線，改用森林色 */
+            transform: translateX(-50%);
+            border-radius: 4px;
+            z-index: 0;
+        }
+        .map-spot {
+            position: relative;
+            margin-bottom: 50px;
+            width: 100%;
+            height: 60px; /* 佔位 */
+            z-index: 1;
+        }
+        .spot-bubble {
+            position: absolute;
+            width: 42%;
+            background: var(--white);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(19, 42, 19, 0.1);
+            text-decoration: none;
+            color: var(--dark);
+            border: 2px solid transparent;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .spot-bubble:active { transform: scale(0.95); }
+        .spot-bubble i { font-size: 1.2rem; margin-right: 8px; color: var(--forest); }
+        .spot-name { font-weight: bold; font-size: 0.9rem; }
+        .spot-sub { font-size: 0.75rem; color: #888; display: block; }
+
+        /* 左側店家 */
+        .spot-left .spot-bubble {
+            right: 52%; /* 在線的左邊 */
+            text-align: right;
+            flex-direction: row-reverse;
+            border-right: 4px solid var(--forest);
+        }
+        .spot-left .spot-bubble i { margin-right: 0; margin-left: 8px; }
+        
+        /* 右側店家 */
+        .spot-right .spot-bubble {
+            left: 52%; /* 在線的右邊 */
+            text-align: left;
+            border-left: 4px solid var(--moss);
+        }
+
+        /* 連接點 */
+        .connector-dot {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 12px;
+            height: 12px;
+            background: var(--white);
+            border: 3px solid var(--dark);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        /* --- 交通分頁樣式 --- */
+        .transport-route {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--paper);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        .route-point { font-weight: bold; font-size: 0.9rem; }
+        .route-arrow { color: var(--olive); font-size: 0.8rem; }
+        .transport-note {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 5px;
+            padding: 5px;
+            background: rgba(236, 243, 158, 0.3);
+            border-radius: 4px;
+        }
+
+        /* --- 底部導航 --- */
+        .nav-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            background: var(--dark);
+            border-radius: 50px;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 999;
+        }
+        .nav-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .nav-btn i { font-size: 1.2rem; margin-bottom: 4px; }
+        .nav-btn.active { color: var(--pale); }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>FUKUOKA</h1>
+    <p>2025.01.19 - 01.23</p>
+    <div class="trip-tag">福岡 & 由布院 5日旅</div>
+</header>
+
+<nav class="nav-bar">
+    <button class="nav-btn active" onclick="switchTab('schedule', this)">
+        <i class="fas fa-calendar-alt"></i> 行程表
+    </button>
+    <button class="nav-btn" onclick="switchTab('transport', this)">
+        <i class="fas fa-bus"></i> 交通
+    </button>
+    <button class="nav-btn" onclick="switchTab('yufuin', this)">
+        <i class="fas fa-map-marked-alt"></i> 由布院
+    </button>
+    <button class="nav-btn" onclick="switchTab('city', this)">
+        <i class="fas fa-city"></i> 市區
+    </button>
+</nav>
+
+<div id="schedule" class="content-section active">
+    
+    <div class="day-badge">Day 1 | 1/19 (一)</div>
+    <div class="timeline-item">
+        <div style="font-weight:bold; color:var(--dark);">10:00 抵達福岡機場</div>
+        <div class="transport-note">🚇 地鐵機場線：福岡空港站 → 天神站 (約11分)</div>
+    </div>
+    
+    <a href="https://maps.google.com/?q=Comfort+Inn+Fukuoka+Tenjin" class="btn-link">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-hotel"></i> Comfort Inn Fukuoka Tenjin</div>
+            <div class="card-desc">先寄放行李，Check-in 後稍作休息。</div>
+            <div class="btn-map">📍 導航飯店</div>
+        </div>
+    </a>
+
+    <div class="timeline-item">
+        <div style="font-weight:bold; color:var(--dark);">下午：天神商圈巡禮</div>
+        <div class="card-desc" style="margin-top:5px;">
+            <i class="fas fa-check" style="color:var(--olive);"></i> <b>mina 天神</b> (Uniqlo/Loft)<br>
+            <i class="fas fa-check" style="color:var(--olive);"></i> 天神地下街<br>
+            <i class="fas fa-check" style="color:var(--olive);"></i> 天神 PARCO
+        </div>
+    </div>
+
+    <div class="day-badge">Day 2 | 1/20 (二)</div>
+    <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮&query_place_id=ChIJzfvrKp-bQTURl65fp6vRJLg" class="btn-link">
+        <div class="card" style="border-left: 4px solid var(--forest);">
+            <div class="card-header"><i class="fas fa-torii-gate"></i> 上午：太宰府天滿宮</div>
+            <div class="card-desc">搭乘西鐵電車前往。參道逛街、吃梅枝餅、欣賞建築。</div>
+        </div>
+    </a>
+    
+    <a href="https://www.google.com/maps/search/?api=1&query=博多丸井OIOI百貨&query_place_id=ChIJvUtJb7iRQTURBIy9sCktfDM" class="btn-link">
+        <div class="card" style="border-left: 4px solid #D35400;">
+            <div class="card-header"><i class="fas fa-ticket-alt"></i> 13:30 原畫展 (已購票)</div>
+            <div class="card-desc">地點：博多マルイ (0101) 5F。<br>結束後可逛博多車站周邊。</div>
+        </div>
+    </a>
+
+    <div class="day-badge">Day 3 | 1/21 (三)</div>
+    <div class="timeline-item">
+        <div style="font-weight:bold;">12:25 搭巴士前往由布院</div>
+        <div style="font-size:0.85rem; color:#666;">西鐵天神巴士總站 3F</div>
+    </div>
+    <div class="timeline-item">
+        <div style="font-weight:bold;">14:59 抵達由布院</div>
+        <div class="transport-note">💡 建議使用車站行李配送服務到飯店</div>
+    </div>
+    <div class="timeline-item">
+        <div style="font-weight:bold;">15:00 - 16:30 快閃逛街</div>
+        <div style="font-size:0.85rem;">重點攻略：B-speak、湯之坪街道</div>
+    </div>
+    
+    <a href="https://www.google.com/maps/search/?api=1&query=由布院+UBL飯店&query_place_id=ChIJ1aYLJGOuRjURMRVuL8rp2Fg" class="btn-link">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-hot-tub"></i> 住宿：由布院 UBL</div>
+            <div class="card-desc">16:30 在車站前搭乘飯店接駁車。</div>
+        </div>
+    </a>
+
+    <div class="day-badge">Day 4 | 1/22 (四)</div>
+    <div class="card">
+        <div class="card-header"><i class="fas fa-coffee"></i> 睡飽飽 & 晨間散步</div>
+        <div class="card-desc">享用早餐與溫泉，退房後可逛昨日未完店家，或散步至金鱗湖。</div>
+    </div>
+
+    <div class="timeline-item">
+        <div style="font-weight:bold;">15:00 搭巴士回博多</div>
+        <div style="font-size:0.85rem;">由布院站前巴士中心 上車</div>
+    </div>
+    <div class="timeline-item">
+        <div style="font-weight:bold;">16:55 抵達博多巴士總站</div>
+        <div class="transport-note">🚕 移動建議：步行約10-15分，若有大行李建議搭計程車(約千元日幣)</div>
+    </div>
+
+    <a href="https://www.google.com/maps/search/?api=1&query=天然溫泉袖湊之湯+Dormy+Inn+PREMIUM+博多・運河城前&query_place_id=ChIJJ1j4y7-RQTUR3dJDzin0iQY" class="btn-link">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-bed"></i> 住宿：Dormy Inn Premium</div>
+            <div class="card-desc">博多運河城前。Check-in 後可步行至隔壁運河城或櫛田神社。</div>
+        </div>
+    </a>
+
+    <div class="day-badge">Day 5 | 1/23 (五)</div>
+    <div class="timeline-item">
+        <div style="font-weight:bold;">最後採買 & 前往機場</div>
+        <div style="font-size:0.85rem;">JR Hakata City / 天神</div>
+    </div>
+    <div class="timeline-item">
+        <div style="font-weight:bold; color:#d9534f;">20:30 飛機起飛</div>
+        <div style="font-size:0.85rem;">建議 18:00 抵達機場</div>
+    </div>
+</div>
+
+<div id="transport" class="content-section">
+    <div class="card">
+        <div class="card-header"><i class="fas fa-plane-arrival"></i> 機場 → 天神飯店</div>
+        <div class="transport-route">
+            <span class="route-point">福岡機場</span>
+            <span class="route-arrow"><i class="fas fa-subway"></i> 地鐵空港線</span>
+            <span class="route-point">天神站</span>
+        </div>
+        <div class="card-desc" style="margin-top:10px;">
+            由天神站 <b>12號出口</b> (有電梯) 或 16號出口步行約 3-5 分鐘抵達 Comfort Inn。
+        </div>
+        <a href="https://maps.google.com/?q=Comfort+Inn+Fukuoka+Tenjin" class="btn-map">📍 導航 Comfort Inn</a>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--forest);">
+        <div class="card-header"><i class="fas fa-bus"></i> Day 3: 往由布院</div>
+        <div class="transport-route">
+            <span class="route-point">天神高速BT</span>
+            <span class="route-arrow">12:25</span>
+            <span class="route-point">由布院站前</span>
+        </div>
+        <div class="transport-note">抵達時間：14:59</div>
+        <a href="https://www.google.com/maps/search/?api=1&query=Nishitetsu+Tenjin+Expressway+Bus+Terminal&query_place_id=ChIJAWL664-RQTUR5TSegARpGQs" class="btn-map">📍 上車點：天神巴士站 3F</a>
+    </div>
+
+    <div class="card" style="border-left:4px solid var(--moss);">
+        <div class="card-header"><i class="fas fa-bus"></i> Day 4: 回博多</div>
+        <div class="transport-route">
+            <span class="route-point">由布院站前</span>
+            <span class="route-arrow">15:00</span>
+            <span class="route-point">博多BT</span>
+        </div>
+        <div class="transport-note">抵達時間：16:55 (博多巴士總站)</div>
+        <a href="https://www.google.com/maps/search/?api=1&query=由布院站前巴士中心&query_place_id=ChIJjSaPGtqtRjURpZkV8J5KQqw" class="btn-map">📍 上車點：由布院站前BC</a>
+    </div>
+
+    <div class="card">
+        <div class="card-header"><i class="fas fa-suitcase-rolling"></i> 博多車站 → 運河城飯店</div>
+        <div class="card-desc">
+            <b>方法 A (輕鬆)：</b> 計程車，約 5 分鐘，車資約 ¥800-1000。<br>
+            <b>方法 B (省錢)：</b> 步行約 10-15 分鐘。<br>
+            <b>方法 C (巴士)：</b> 博多站前搭百元巴士到「キャナルシティ博多前」。
+        </div>
+        <a href="https://www.google.com/maps/search/?api=1&query=天然溫泉袖湊之湯+Dormy+Inn+PREMIUM+博多・運河城前&query_place_id=ChIJJ1j4y7-RQTUR3dJDzin0iQY" class="btn-map">📍 導航 Dormy Inn</a>
+    </div>
+</div>
+
+<div id="yufuin" class="content-section">
+    <div style="text-align:center; margin-bottom:10px;">
+        <h3 style="color:var(--forest); margin:0;">湯之坪街道散策</h3>
+        <span style="font-size:0.8rem; background:var(--pale); padding:2px 8px; border-radius:10px;">Start: 車站 ➞ End: 金鱗湖</span>
+    </div>
+
+    <div class="yufuin-street-container">
+        <div class="street-line"></div>
+
+        <div class="map-spot" style="display:flex; justify-content:center;">
+            <div class="connector-dot" style="background:var(--forest); border-color:var(--pale);"></div>
+            <a href="https://maps.google.com/?q=Yufuin+Station" class="spot-bubble" style="position:static; width:auto; background:var(--forest); color:white; transform:none;">
+                <i class="fas fa-train" style="color:white;"></i> 
+                <div>
+                    <div class="spot-name">由布院車站 (起點)</div>
+                    <div class="spot-sub" style="color:#ddd;">14:59 抵達</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-left">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=蛋糕卷+B+SPEAK+本店&query_place_id=ChIJO7RnQNetRjUR0hEidDDEOvo" class="spot-bubble">
+                <i class="fas fa-birthday-cake"></i>
+                <div>
+                    <div class="spot-name">B-speak</div>
+                    <div class="spot-sub">必買蛋糕卷</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-right">
+            <div class="connector-dot"></div>
+            <a href="https://maps.google.com/?q=Donguri+no+Mori+Yufuin" class="spot-bubble">
+                <i class="fas fa-cat"></i>
+                <div>
+                    <div class="spot-name">どんぐりの森</div>
+                    <div class="spot-sub">吉卜力專賣店</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-left">
+            <div class="connector-dot"></div>
+            <a href="https://maps.google.com/?q=Milch+Yufuin" class="spot-bubble">
+                <i class="fas fa-cheese"></i>
+                <div>
+                    <div class="spot-name">Milch</div>
+                    <div class="spot-sub">半熟起司蛋糕</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-right">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=金賞可樂餅+本店&query_place_id=ChIJaadjbX6uRjURi_pn3I7qpwM" class="spot-bubble">
+                <i class="fas fa-drumstick-bite"></i>
+                <div>
+                    <div class="spot-name">金賞可樂餅</div>
+                    <div class="spot-sub">人氣排隊小吃</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-left">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=史奴比茶屋&query_place_id=ChIJg8kh-H6uRjURISKPf0GgqKI" class="spot-bubble">
+                <i class="fas fa-dog"></i>
+                <div>
+                    <div class="spot-name">Snoopy 茶屋</div>
+                    <div class="spot-sub">日式茶點</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-right">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=湯布院花卉村&query_place_id=ChIJWax-bn6uRjUReLLmqHrObCU" class="spot-bubble">
+                <i class="fas fa-home"></i>
+                <div>
+                    <div class="spot-name">Floral Village</div>
+                    <div class="spot-sub">童話村/動物</div>
+                </div>
+            </a>
+        </div>
+        
+         <div class="map-spot spot-left">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=由布院+花麴菊家&query_place_id=ChIJkaCZUH6uRjURl9_jBMx6fbk" class="spot-bubble">
+                <i class="fas fa-cookie"></i>
+                <div>
+                    <div class="spot-name">花麴菊家</div>
+                    <div class="spot-sub">布丁銅鑼燒</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot spot-right">
+            <div class="connector-dot"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=湯布院昭和館&query_place_id=ChIJQZbq_X2uRjURqp-w7c4K8-4" class="spot-bubble">
+                <i class="fas fa-tv"></i>
+                <div>
+                    <div class="spot-name">湯布院昭和館</div>
+                    <div class="spot-sub">懷舊復古風</div>
+                </div>
+            </a>
+        </div>
+
+        <div class="map-spot" style="display:flex; justify-content:center;">
+            <div class="connector-dot" style="background:#3498db; border-color:#fff;"></div>
+            <a href="https://www.google.com/maps/search/?api=1&query=金鱗湖&query_place_id=ChIJa7QFnn2uRjUR5ofN82Ctd44" class="spot-bubble" style="position:static; width:auto; background:#3498db; color:white; transform:none; border:none;">
+                <i class="fas fa-water" style="color:white;"></i>
+                <div>
+                    <div class="spot-name">金鱗湖 (終點)</div>
+                    <div class="spot-sub" style="color:#eee;">夢幻晨霧美景</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div id="city" class="content-section">
+    <div style="text-align:center; margin-bottom:20px;">
+        <h3 style="color:var(--forest);">天神區 Tenjin</h3>
+    </div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+        <a href="https://www.google.com/maps/search/?api=1&query=天神地下街&query_place_id=ChIJ970Xo46RQTURm6GUmUJcn6Y" class="btn-link">
+            <div class="card" style="margin:0; text-align:center; padding:15px 5px;">
+                <i class="fas fa-shopping-bag" style="font-size:1.5rem; color:var(--forest);"></i>
+                <div style="margin-top:5px; font-weight:bold;">天神地下街</div>
+            </div>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=福岡PARCO&query_place_id=ChIJVVUVAI-RQTUR4O0-0xXxi0Y" class="btn-link">
+            <div class="card" style="margin:0; text-align:center; padding:15px 5px;">
+                <i class="fas fa-tshirt" style="font-size:1.5rem; color:var(--forest);"></i>
+                <div style="margin-top:5px; font-weight:bold;">PARCO</div>
+            </div>
+        </a>
+        <a href="https://www.google.com/maps/search/?api=1&query=Mina+天神&query_place_id=ChIJtSPre46RQTURJjCpXi0cUPo" class="btn-link" style="grid-column: span 2;">
+            <div class="card" style="margin:0; text-align:center; padding:15px; border-color:var(--forest);">
+                <i class="fas fa-layer-group" style="font-size:1.5rem; color:var(--forest);"></i>
+                <div style="margin-top:5px; font-weight:bold;">mina 天神</div>
+                <div style="font-size:0.8rem; color:#666;">UNIQLO / LOFT 大型店</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="dashed-line" style="margin:30px 0;"></div>
+
+    <div style="text-align:center; margin-bottom:20px;">
+        <h3 style="color:var(--forest);">博多區 Hakata</h3>
+    </div>
+    <a href="https://www.google.com/maps/search/?api=1&query=櫛田神社&query_place_id=ChIJV2pTquqRQTURpI1FhH5siaE" class="btn-link">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-torii-gate"></i> 櫛田神社</div>
+            <div class="card-desc">就在飯店附近，博多總鎮守。</div>
+        </div>
+    </a>
+    <a href="https://www.google.com/maps/search/?api=1&query=博多運河城&query_place_id=ChIJYcOBiZWRQTUR0Rl0ehe67eA" class="btn-link">
+        <div class="card">
+            <div class="card-header"><i class="fas fa-water"></i> 博多運河城</div>
+            <div class="card-desc">水舞秀、購物中心，飯店步行可達。</div>
+        </div>
+    </a>
+</div>
+
+<script>
+    function switchTab(tabId, btn) {
+        // Hide all sections
+        document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+        // Remove active class from buttons
+        document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+        
+        // Show selected section
+        document.getElementById(tabId).classList.add('active');
+        // Activate button
+        btn.classList.add('active');
+        
+        // Scroll to top
+        window.scrollTo(0, 0);
+    }
+</script>
+
+</body>
+</html>
