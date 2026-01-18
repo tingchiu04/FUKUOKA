@@ -1,0 +1,375 @@
+/* --- 森林系色票定義 --- */
+:root {
+    --dark: #132A13;       /* 深綠：文字、重點 */
+    --forest: #31572C;     /* 森林綠：標題、按鈕 */
+    --moss: #4F772D;       /* 苔綠：次要元素 */
+    --olive: #90A955;      /* 橄欖綠：裝飾、線條 */
+    --pale: #ECF39E;       /* 嫩綠：背景亮部 */
+    --paper: #F9F9F7;      /* 米白：模擬紙張背景 */
+    --white: #ffffff;
+    --red: #D35400;        /* 重點標示用 */
+    --meat: #943126;       /* 美食區專用色 */
+    --blue: #3498db;       /* 湖泊色 */
+}
+
+/* --- 全域設定 --- */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    margin: 0; padding: 0;
+    background-color: var(--paper);
+    color: var(--dark);
+    padding-bottom: 100px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* --- Header --- */
+header {
+    background: linear-gradient(135deg, var(--dark), var(--forest));
+    color: var(--pale);
+    padding: 30px 20px 50px;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(19, 42, 19, 0.15);
+}
+header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
+header p { margin: 10px 0 0; font-size: 0.9rem; opacity: 0.9; color: var(--olive); }
+
+/* --- 內容區塊 --- */
+.content-section {
+    display: none;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    animation: fadeIn 0.4s ease;
+}
+.content-section.active { display: block; }
+
+@keyframes fadeIn { 
+    from { opacity: 0; transform: translateY(10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+/* --- 品牌快搜按鈕 Grid --- */
+.search-label {
+    font-size: 0.9rem; 
+    color: #666; 
+    margin-bottom: 10px;
+}
+
+.brand-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 30px;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.brand-btn {
+    background: var(--paper);
+    border: 1px solid var(--olive);
+    border-radius: 10px;
+    padding: 10px 5px;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--forest);
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 70px;
+}
+.brand-btn:active { background: var(--pale); transform: scale(0.95); }
+.brand-btn i { font-size: 1.2rem; margin-bottom: 5px; color: var(--moss); }
+
+/* --- 卡片通用樣式 --- */
+.dept-card {
+    background: var(--white);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    overflow: hidden;
+    border-left: 5px solid var(--forest);
+    transition: transform 0.2s;
+}
+
+/* 餐廳專用卡片樣式 */
+.food-card { 
+    border-left-color: var(--meat); 
+    background: #fffbfb; /* 微微的暖色底，區分美食 */
+}
+
+/* 景點專用卡片 */
+.spot-card {
+    border-left-color: #D35400;
+}
+
+.dept-header {
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    color: var(--dark);
+}
+.dept-header i.arrow { transition: transform 0.3s; color: var(--olive); }
+.dept-header.open i.arrow { transform: rotate(180deg); }
+
+.dept-body {
+    display: none;
+    padding: 0 15px 15px;
+    border-top: 1px dashed var(--olive);
+    background: rgba(255,255,255,0.5);
+}
+.dept-body.show { display: block; animation: slideDown 0.3s ease; }
+
+@keyframes slideDown { 
+    from { opacity: 0; transform: translateY(-10px); } 
+    to { opacity: 1; transform: translateY(0); } 
+}
+
+.floor-row {
+    display: flex;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+    align-items: center;
+}
+.floor-num {
+    width: 50px;
+    font-weight: bold;
+    color: var(--moss);
+    flex-shrink: 0;
+    font-size: 0.8rem;
+}
+.floor-desc { color: #555; line-height: 1.4; flex-grow: 1; }
+.highlight { color: var(--red); font-weight: bold; }
+.desc-text { margin: 10px 0; font-size: 0.9rem; color: #555; }
+
+.map-btn-full {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--forest);
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.brand-map-link {
+    display: inline-block;
+    background: var(--paper);
+    border: 1px solid var(--olive);
+    color: var(--forest);
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.8rem;
+    white-space: nowrap;
+}
+
+/* --- Modal 彈窗 --- */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(19, 42, 19, 0.6);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+.modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
+.modal-box {
+    background: white;
+    width: 85%;
+    max-width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+}
+.modal-close {
+    position: absolute;
+    top: 10px; right: 15px;
+    font-size: 1.5rem;
+    color: #999;
+    cursor: pointer;
+}
+.modal-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--forest);
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--pale);
+    padding-bottom: 10px;
+}
+.brand-location {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed #eee;
+}
+.brand-shop-name { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
+.brand-floor { color: var(--moss); font-size: 0.9rem; margin-bottom: 8px; }
+
+/* --- 底部導航 --- */
+.nav-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    background: var(--dark);
+    border-radius: 50px;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+.nav-btn {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-size: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+}
+.nav-btn i { font-size: 1.2rem; margin-bottom: 4px; }
+.nav-btn.active { color: var(--pale); }
+
+/* --- 標題與分隔線 --- */
+.section-header {
+    color: var(--forest);
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 40px 0 15px; /* 加大上方間距 */
+    display: flex;
+    align-items: center;
+}
+.section-header::before {
+    content: '';
+    width: 8px; height: 24px;
+    background: var(--pale);
+    margin-right: 10px;
+    border-radius: 4px;
+    border: 1px solid var(--olive);
+}
+
+.food-header {
+    color: var(--meat);
+}
+
+/* 分隔線 */
+.section-divider {
+    height: 2px;
+    background-image: linear-gradient(to right, var(--olive) 50%, transparent 50%);
+    background-size: 20px 100%;
+    margin: 40px 0 10px;
+    opacity: 0.5;
+}
+
+/* --- 行程表相關樣式 --- */
+.timeline-item { 
+    padding-left: 20px; 
+    border-left: 2px dashed var(--olive); 
+    margin-left: 10px; 
+    padding-bottom: 20px; 
+    position: relative; 
+}
+.timeline-item::before { 
+    content: ''; 
+    position: absolute; 
+    left: -6px; top: 0; 
+    width: 10px; height: 10px; 
+    background: var(--pale); 
+    border: 2px solid var(--forest); 
+    border-radius: 50%; 
+}
+.day-badge { 
+    background: var(--forest); 
+    color: var(--pale); 
+    padding: 5px 15px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    margin: 30px 0 10px; 
+    box-shadow: 3px 3px 0px var(--olive); 
+    display: inline-block;
+}
+.card { 
+    background: var(--white); 
+    border-radius: 12px; 
+    padding: 15px; 
+    margin-bottom: 15px; 
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05); 
+    border: 1px solid rgba(144, 169, 85, 0.2); 
+}
+.card-link { text-decoration: none; color: inherit; }
+.timeline-title { font-weight: bold; }
+.timeline-desc { font-size: 0.85rem; color: #666; margin-top: 5px; }
+.note-text { color: var(--olive); font-size: 0.8rem; }
+.card-title { font-weight: bold; color: var(--forest); margin-bottom: 5px; }
+.card-text { font-size: 0.9rem; }
+
+/* 特殊卡片顏色 */
+.card-forest-border { border-left: 4px solid var(--forest); }
+.card-title-forest { font-weight: bold; color: var(--forest); }
+.card-orange-border { border-left: 4px solid var(--red); }
+.card-title-orange { font-weight: bold; color: var(--red); }
+.orange-text { color: var(--red); }
+
+/* --- 交通區塊 --- */
+.transport-box { 
+    background: var(--dark); 
+    color: white; 
+    border-radius: 15px; 
+    padding: 15px; 
+    margin-bottom: 15px; 
+}
+.transport-box h3 { margin: 0 0 10px; }
+.transport-box p { margin: 0; font-size: 0.9rem; }
+.box-forest { background: var(--forest); }
+.box-moss { background: var(--moss); }
+.box-link { color: var(--pale); display: block; margin-top: 10px; }
+
+/* --- 由布院地圖視覺化 --- */
+.yufuin-header { text-align: center; padding-bottom: 20px; color: var(--forest); }
+.yufuin-container { position: relative; max-width: 400px; margin: 0 auto; }
+.street-line { 
+    position: absolute; left: 50%; top: 0; bottom: 0; 
+    width: 4px; background: var(--olive); 
+    transform: translateX(-50%); 
+}
+.map-node { position: relative; margin-bottom: 30px; display: flex; justify-content: center; }
+.node-station { 
+    background: var(--forest); color: white; 
+    padding: 8px 15px; border-radius: 20px; 
+    text-decoration: none; z-index: 1; 
+}
+.node-lake { 
+    background: var(--blue); color: white; 
+    padding: 8px 15px; border-radius: 20px; 
+    text-decoration: none; z-index: 1; 
+}
+.map-row-left { position: relative; margin-bottom: 30px; }
+.map-row-right { position: relative; margin-bottom: 30px; text-align: right; }
+.node-card {
+    display: inline-block; width: 45%; 
+    background: white; padding: 8px; border-radius: 8px; 
+    text-decoration: none; color: var(--dark); 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.map-row-left .node-card { margin-left: 5px; }
+.map-row-right .node-card { margin-right: 5px; text-align: left; }
+.border-forest { border-left: 4px solid var(--forest); }
+.border-moss { border-right: 4px solid var(--moss); }
