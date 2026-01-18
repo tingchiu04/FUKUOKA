@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>福岡由布院．森之旅 🌿</title>
+    <title>2026福岡之旅 🌿</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         /* --- 森林系色票 --- */
@@ -16,7 +16,7 @@
             --paper: #F9F9F7;      /* 米白：模擬紙張背景 */
             --white: #ffffff;
             --red: #D35400;        /* 重點標示用 */
-            --meat: #A93226;       /* 肉類料理專用色 */
+            --meat: #943126;       /* 美食區專用色 */
         }
 
         body {
@@ -82,7 +82,7 @@
         .brand-btn:active { background: var(--pale); transform: scale(0.95); }
         .brand-btn i { font-size: 1.2rem; margin-bottom: 5px; color: var(--moss); }
 
-        /* --- 百貨/餐廳折疊卡片 --- */
+        /* --- 卡片樣式 --- */
         .dept-card {
             background: var(--white);
             border-radius: 12px;
@@ -90,9 +90,19 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.05);
             overflow: hidden;
             border-left: 5px solid var(--forest);
+            transition: transform 0.2s;
         }
+        
         /* 餐廳專用卡片樣式 */
-        .food-card { border-left-color: var(--meat); }
+        .food-card { 
+            border-left-color: var(--meat); 
+            background: #fffbfb; /* 微微的暖色底，區分美食 */
+        }
+        
+        /* 景點專用卡片 */
+        .spot-card {
+            border-left-color: #D35400;
+        }
         
         .dept-header {
             padding: 15px;
@@ -110,7 +120,7 @@
             display: none;
             padding: 0 15px 15px;
             border-top: 1px dashed var(--olive);
-            background: #fafcf9;
+            background: rgba(255,255,255,0.5);
         }
         .dept-body.show { display: block; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
@@ -232,17 +242,28 @@
         /* --- 其他樣式 --- */
         .section-header {
             color: var(--forest);
-            font-size: 1.1rem;
-            margin: 20px 0 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 40px 0 15px; /* 加大上方間距 */
             display: flex;
             align-items: center;
         }
         .section-header::before {
             content: '';
-            width: 6px; height: 20px;
+            width: 8px; height: 24px;
             background: var(--pale);
             margin-right: 10px;
             border-radius: 4px;
+            border: 1px solid var(--olive);
+        }
+
+        /* 分隔線 */
+        .section-divider {
+            height: 2px;
+            background-image: linear-gradient(to right, var(--olive) 50%, transparent 50%);
+            background-size: 20px 100%;
+            margin: 40px 0 10px;
+            opacity: 0.5;
         }
 
         /* --- 由布院地圖 & 行程表 CSS --- */
@@ -256,8 +277,8 @@
 <body>
 
 <header>
-    <h1>FUKUOKA</h1>
-    <p>福岡 & 由布院 5日旅</p>
+    <h1>2026福岡之旅</h1>
+    <p>Fukuoka Trip 2026 🌿</p>
 </header>
 
 <nav class="nav-bar">
@@ -269,7 +290,7 @@
 
 <div id="city" class="content-section">
     
-    <div class="section-header">品牌快搜 (點擊查看位置)</div>
+    <div style="font-size:0.9rem; color:#666; margin-bottom:10px;">🔍 品牌快搜</div>
     <div class="brand-grid">
         <div class="brand-btn" onclick="openModal('uniqlo')"><i class="fas fa-tshirt"></i>UNIQLO</div>
         <div class="brand-btn" onclick="openModal('gu')"><i class="fas fa-vest"></i>GU</div>
@@ -281,89 +302,40 @@
         <div class="brand-btn" onclick="openModal('drug')"><i class="fas fa-pills"></i>藥妝店</div>
     </div>
 
-    <div class="section-header">必吃美食地圖</div>
+    <div class="section-divider"></div>
 
-    <div class="dept-card food-card">
+    <div class="section-header">近郊必去景點</div>
+    <div class="dept-card spot-card">
         <div class="dept-header" onclick="toggleDept(this)">
-            <span>🥩 燒肉處 石原牛 (中洲)</span> <i class="fas fa-chevron-down arrow"></i>
+            <span>⛩️ 太宰府天滿宮</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">鹿兒島產幻之和牛「石原牛」，全日本只有這裡吃得到（其他都外銷）。中洲川端站旁。</p>
+            <p style="margin:10px 0; font-size:0.9rem;">福岡必遊！著名的學問之神神社。</p>
             <div class="floor-row">
-                <div class="floor-desc"><b>博多 Riverain 店</b> (1F)<br>午餐CP值高，晚餐為頂級燒肉。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Yakiniku+Dokoro+Ishihara+Gyu+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
+                <div class="floor-desc">
+                    <b>看點：</b>表參道商店街、隈研吾設計的星巴克、御神牛。<br>
+                    <b>必吃：</b>梅枝餅 (熱熱吃最好吃)。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮&query_place_id=ChIJzfvrKp-bQTURl65fp6vRJLg" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
 
-    <div class="dept-card food-card">
-        <div class="dept-header" onclick="toggleDept(this)">
-            <span>🍖 敘敘苑 (頂級燒肉)</span> <i class="fas fa-chevron-down arrow"></i>
-        </div>
-        <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">無雷的高級燒肉，景觀好、服務佳，商業午餐最划算。</p>
-            <div class="floor-row">
-                <div class="floor-desc"><b>KITTE 博多店</b> (10F)<br>就在博多車站旁，交通最方便。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-            <div class="floor-row">
-                <div class="floor-desc"><b>天神岩田屋店</b> (本館 7F)<br>位於天神商圈中心。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+Tenjin+Iwataya" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-        </div>
-    </div>
+
+    <div class="section-header" style="color:var(--meat);">必吃美食地圖</div>
 
     <div class="dept-card food-card">
         <div class="dept-header" onclick="toggleDept(this)">
-            <span>🍤 天麩羅處 hirao (平價天婦羅)</span> <i class="fas fa-chevron-down arrow"></i>
+            <span>🥖 DACOMECCA (超紅麵包店)</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">福岡靈魂美食！現炸天婦羅一道道上菜，<b>免費的「柚子花枝」小菜</b>超級好吃。</p>
+            <p style="margin:10px 0; font-size:0.9rem;">
+                博多站前必排隊名店！Amam Dacotan 的姊妹店。<br>
+                <b>必吃：</b>明太子法棍、炭烤香腸麵包、各式甜甜圈。
+            </p>
             <div class="floor-row">
-                <div class="floor-desc"><b>大名店</b> (天神區域)<br>逛街最順路，位於天神西通附近。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Daimyo" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-             <div class="floor-row">
-                <div class="floor-desc"><b>ACROS 店</b> (天神地下)<br>ACROS 福岡地下2樓。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Acros" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="dept-card food-card">
-        <div class="dept-header" onclick="toggleDept(this)">
-            <span>🍜 Shin Shin 拉麵</span> <i class="fas fa-chevron-down arrow"></i>
-        </div>
-        <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">博多純情拉麵，麵條極細，湯頭濃郁帶甜，許多藝人(如東方神起)愛店。</p>
-            <div class="floor-row">
-                <div class="floor-desc"><b>天神本店</b><br>朝聖必去，排隊人潮較多。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+Tenjin+Main+Store" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-            <div class="floor-row">
-                <div class="floor-desc"><b>KITTE 博多店</b> (B1)<br>位置便利，地下美食街。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-             <div class="floor-row">
-                <div class="floor-desc"><b>PARCO 店</b> (B1)<br>天神 PARCO 地下。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+PARCO" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="dept-card food-card">
-        <div class="dept-header" onclick="toggleDept(this)">
-            <span>🍜 一蘭拉麵</span> <i class="fas fa-chevron-down arrow"></i>
-        </div>
-        <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">福岡是發源地，總本店有掛燈籠。</p>
-            <div class="floor-row">
-                <div class="floor-desc"><b>本社總本店</b> (中洲)<br>特色：整棟樓掛燈籠，24小時營業。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Main+Office" target="_blank" class="brand-map-link">導航去</a>
-            </div>
-            <div class="floor-row">
-                <div class="floor-desc"><b>博多運河城店</b> (B1)<br>特色：全日本唯一的「方碗」。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Canal+City" target="_blank" class="brand-map-link">導航去</a>
+                <div class="floor-desc"><b>博多店</b><br>就在博多車站對面，建議早上去。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=DACOMECCA+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
             </div>
         </div>
     </div>
@@ -385,7 +357,95 @@
         </div>
     </div>
 
-    <div class="section-header">百貨樓層攻略 (點擊展開)</div>
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🥩 燒肉處 石原牛 (中洲)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">鹿兒島產幻之和牛「石原牛」，全日本只有這裡吃得到。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>博多 Riverain 店</b> (1F)<br>午餐CP值高，晚餐為頂級燒肉。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Yakiniku+Dokoro+Ishihara+Gyu+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍖 敘敘苑 (頂級燒肉)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">無雷的高級燒肉，景觀好、服務佳。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>KITTE 博多店</b> (10F)<br>就在博多車站旁，交通最方便。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>天神岩田屋店</b> (本館 7F)<br>位於天神商圈中心。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+Tenjin+Iwataya" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍤 天麩羅處 hirao</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">福岡靈魂美食！<b>免費的「柚子花枝」小菜</b>超級好吃。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>大名店</b> (天神)<br>逛街最順路，位於天神西通附近。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Daimyo" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+             <div class="floor-row">
+                <div class="floor-desc"><b>ACROS 店</b> (天神地下)<br>ACROS 福岡地下2樓。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Acros" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍜 Shin Shin 拉麵</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">博多純情拉麵，麵條極細，湯頭濃郁帶甜。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>天神本店</b><br>朝聖必去，排隊人潮較多。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+Tenjin+Main+Store" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>KITTE 博多店</b> (B1)<br>位置便利，地下美食街。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+             <div class="floor-row">
+                <div class="floor-desc"><b>PARCO 店</b> (B1)<br>天神 PARCO 地下。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+PARCO" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍜 一蘭拉麵</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <div class="floor-row">
+                <div class="floor-desc"><b>本社總本店</b> (中洲)<br>整棟樓掛燈籠，24小時營業。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Main+Office" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>博多運河城店</b> (B1)<br>全日本唯一的「方碗」。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Canal+City" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="section-divider"></div>
+
+
+    <div class="section-header">百貨樓層攻略</div>
 
     <div class="dept-card">
         <div class="dept-header" onclick="toggleDept(this)">
