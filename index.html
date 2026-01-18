@@ -4,275 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026福岡之旅 🌿</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        /* --- 森林系色票 --- */
-        :root {
-            --dark: #132A13;       /* 深綠：文字、重點 */
-            --forest: #31572C;     /* 森林綠：標題、按鈕 */
-            --moss: #4F772D;       /* 苔綠：次要元素 */
-            --olive: #90A955;      /* 橄欖綠：裝飾、線條 */
-            --pale: #ECF39E;       /* 嫩綠：背景亮部 */
-            --paper: #F9F9F7;      /* 米白：模擬紙張背景 */
-            --white: #ffffff;
-            --red: #D35400;        /* 重點標示用 */
-            --meat: #943126;       /* 美食區專用色 */
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            margin: 0; padding: 0;
-            background-color: var(--paper);
-            color: var(--dark);
-            padding-bottom: 100px;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* --- Header --- */
-        header {
-            background: linear-gradient(135deg, var(--dark), var(--forest));
-            color: var(--pale);
-            padding: 30px 20px 50px;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
-            text-align: center;
-            box-shadow: 0 10px 30px rgba(19, 42, 19, 0.15);
-        }
-        header h1 { margin: 0; font-size: 1.8rem; letter-spacing: 2px; }
-        header p { margin: 10px 0 0; font-size: 0.9rem; opacity: 0.9; color: var(--olive); }
-
-        /* --- 內容區塊 --- */
-        .content-section {
-            display: none;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            animation: fadeIn 0.4s ease;
-        }
-        .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- 品牌快搜按鈕 Grid --- */
-        .brand-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 30px;
-            background: white;
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-        }
-        .brand-btn {
-            background: var(--paper);
-            border: 1px solid var(--olive);
-            border-radius: 10px;
-            padding: 10px 5px;
-            text-align: center;
-            font-size: 0.75rem;
-            color: var(--forest);
-            cursor: pointer;
-            transition: 0.2s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 70px;
-        }
-        .brand-btn:active { background: var(--pale); transform: scale(0.95); }
-        .brand-btn i { font-size: 1.2rem; margin-bottom: 5px; color: var(--moss); }
-
-        /* --- 卡片樣式 --- */
-        .dept-card {
-            background: var(--white);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            overflow: hidden;
-            border-left: 5px solid var(--forest);
-            transition: transform 0.2s;
-        }
-        
-        /* 餐廳專用卡片樣式 */
-        .food-card { 
-            border-left-color: var(--meat); 
-            background: #fffbfb; /* 微微的暖色底，區分美食 */
-        }
-        
-        /* 景點專用卡片 */
-        .spot-card {
-            border-left-color: #D35400;
-        }
-        
-        .dept-header {
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
-            font-weight: bold;
-            color: var(--dark);
-        }
-        .dept-header i.arrow { transition: transform 0.3s; color: var(--olive); }
-        .dept-header.open i.arrow { transform: rotate(180deg); }
-        
-        .dept-body {
-            display: none;
-            padding: 0 15px 15px;
-            border-top: 1px dashed var(--olive);
-            background: rgba(255,255,255,0.5);
-        }
-        .dept-body.show { display: block; animation: slideDown 0.3s ease; }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .floor-row {
-            display: flex;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
-            align-items: center;
-        }
-        .floor-num {
-            width: 50px;
-            font-weight: bold;
-            color: var(--moss);
-            flex-shrink: 0;
-            font-size: 0.8rem;
-        }
-        .floor-desc { color: #555; line-height: 1.4; flex-grow: 1; }
-        .highlight { color: var(--red); font-weight: bold; }
-
-        .map-btn-full {
-            display: block;
-            width: 100%;
-            text-align: center;
-            background: var(--forest);
-            color: white;
-            padding: 10px;
-            text-decoration: none;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            border-radius: 6px;
-        }
-
-        .brand-map-link {
-            display: inline-block;
-            background: var(--paper);
-            border: 1px solid var(--olive);
-            color: var(--forest);
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.8rem;
-            white-space: nowrap;
-        }
-
-        /* --- Modal 彈窗 --- */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(19, 42, 19, 0.6);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-        }
-        .modal-overlay.active { display: flex; animation: fadeIn 0.2s; }
-        .modal-box {
-            background: white;
-            width: 85%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border-radius: 15px;
-            padding: 20px;
-            position: relative;
-        }
-        .modal-close {
-            position: absolute;
-            top: 10px; right: 15px;
-            font-size: 1.5rem;
-            color: #999;
-            cursor: pointer;
-        }
-        .modal-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--forest);
-            margin-bottom: 15px;
-            border-bottom: 2px solid var(--pale);
-            padding-bottom: 10px;
-        }
-        .brand-location {
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px dashed #eee;
-        }
-        .brand-shop-name { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
-        .brand-floor { color: var(--moss); font-size: 0.9rem; margin-bottom: 8px; }
-
-        /* --- 底部導航 --- */
-        .nav-bar {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 90%;
-            background: var(--dark);
-            border-radius: 50px;
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            z-index: 999;
-        }
-        .nav-btn {
-            background: none;
-            border: none;
-            color: rgba(255,255,255,0.5);
-            font-size: 0.75rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            cursor: pointer;
-        }
-        .nav-btn i { font-size: 1.2rem; margin-bottom: 4px; }
-        .nav-btn.active { color: var(--pale); }
-
-        /* --- 其他樣式 --- */
-        .section-header {
-            color: var(--forest);
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin: 40px 0 15px; /* 加大上方間距 */
-            display: flex;
-            align-items: center;
-        }
-        .section-header::before {
-            content: '';
-            width: 8px; height: 24px;
-            background: var(--pale);
-            margin-right: 10px;
-            border-radius: 4px;
-            border: 1px solid var(--olive);
-        }
-
-        /* 分隔線 */
-        .section-divider {
-            height: 2px;
-            background-image: linear-gradient(to right, var(--olive) 50%, transparent 50%);
-            background-size: 20px 100%;
-            margin: 40px 0 10px;
-            opacity: 0.5;
-        }
-
-        /* --- 由布院地圖 & 行程表 CSS --- */
-        .timeline-item { padding-left: 20px; border-left: 2px dashed var(--olive); margin-left: 10px; padding-bottom: 20px; position: relative; }
-        .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: var(--pale); border: 2px solid var(--forest); border-radius: 50%; }
-        .day-badge { background: var(--forest); color: var(--pale); padding: 5px 15px; border-radius: 4px; font-weight: bold; margin: 30px 0 10px; box-shadow: 3px 3px 0px var(--olive); display: inline-block;}
-        .card { background: var(--white); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(144, 169, 85, 0.2); }
-        .transport-box { background: var(--dark); color: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
-    </style>
 </head>
 <body>
 
@@ -290,7 +23,7 @@
 
 <div id="city" class="content-section">
     
-    <div style="font-size:0.9rem; color:#666; margin-bottom:10px;">🔍 品牌快搜</div>
+    <div class="search-label">🔍 品牌快搜</div>
     <div class="brand-grid">
         <div class="brand-btn" onclick="openModal('uniqlo')"><i class="fas fa-tshirt"></i>UNIQLO</div>
         <div class="brand-btn" onclick="openModal('gu')"><i class="fas fa-vest"></i>GU</div>
@@ -304,38 +37,150 @@
 
     <div class="section-divider"></div>
 
-    <div class="section-header">近郊必去景點</div>
+    <div class="section-header">推薦景點</div>
+
     <div class="dept-card spot-card">
         <div class="dept-header" onclick="toggleDept(this)">
             <span>⛩️ 太宰府天滿宮</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">福岡必遊！著名的學問之神神社。</p>
+            <p class="desc-text">福岡最具代表性的神社，供奉學問之神。</p>
             <div class="floor-row">
                 <div class="floor-desc">
-                    <b>看點：</b>表參道商店街、隈研吾設計的星巴克、御神牛。<br>
-                    <b>必吃：</b>梅枝餅 (熱熱吃最好吃)。
+                    <b>必看：</b>表參道商店街、隈研吾設計星巴克、御神牛、飛梅。<br>
+                    <b>美食：</b>梅枝餅。
                 </div>
-                <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮&query_place_id=ChIJzfvrKp-bQTURl65fp6vRJLg" target="_blank" class="brand-map-link">📍 導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>⛩️ 櫛田神社 (博多總鎮守)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">博多人的信仰中心，著名的「博多祇園山笠」祭典就在這。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>必看：</b>巨大裝飾山笠 (全年展示)、靈泉鶴之井戶。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=櫛田神社" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>⛩️ 住吉神社</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">日本三大住吉之一，祈求航海安全與開運除厄的能量景點。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>位置：</b>距離博多車站步行約 10-15 分鐘。<br>
+                    <b>特色：</b>境內綠意盎然，還有相撲力士像。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=福岡住吉神社" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🖼️ 由布院花窗玻璃美術館</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">位於由布院的夢幻景點，充滿歐式復古風情。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>特色：</b>展示 19 世紀歐洲古董彩繪玻璃，附設聖尼古拉斯教堂。<br>
+                    <span style="color:#d35400; font-size:0.8rem;">(註：此景點位於由布院區域)</span>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=由布院ステンドグラス美術館" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🎨 博多傳統工藝館</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">深入了解博多織、博多的人形娃娃等精湛工藝。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>位置：</b>就在櫛田神社旁，適合安排在一起參觀。<br>
+                    <b>特色：</b>建築本身現代結合傳統，展示品非常精緻。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=博多傳統工藝館" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🖼️ 福岡市美術館</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">位於大濠公園內，結合古美術與現代藝術。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>必拍：</b>草間彌生的黃色南瓜 (戶外免費參觀)。<br>
+                    <b>氛圍：</b>整修後空間非常舒適，適合文青散策。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=福岡市美術館" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card spot-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🌳 大濠公園</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">福岡市民的後花園，超大水池與環湖步道。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>休閒：</b>踩天鵝船、湖畔星巴克喝咖啡、散步慢跑。<br>
+                    <b>交通：</b>地鐵大濠公園站直達。
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=大濠公園" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
 
 
-    <div class="section-header" style="color:var(--meat);">必吃美食地圖</div>
+    <div class="section-header food-header">必吃美食地圖</div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍓 PRince of the fruit (頂級聖代)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">
+                福岡水果聖代的天花板！使用當季最高級水果，價格稍高但絕對值得。<br>
+                <b>注意：</b>每人低消一份餐點。
+            </p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>藥院店</b><br>距離天神一站距離 (藥院大通站)，環境優雅。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=PRince+of+the+fruit" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
 
     <div class="dept-card food-card">
         <div class="dept-header" onclick="toggleDept(this)">
             <span>🥖 DACOMECCA (超紅麵包店)</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">
+            <p class="desc-text">
                 博多站前必排隊名店！Amam Dacotan 的姊妹店。<br>
                 <b>必吃：</b>明太子法棍、炭烤香腸麵包、各式甜甜圈。
             </p>
             <div class="floor-row">
                 <div class="floor-desc"><b>博多店</b><br>就在博多車站對面，建議早上去。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=DACOMECCA+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=DACOMECCA" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -345,14 +190,14 @@
             <span>🥖 明太子法國麵包 (Full Full)</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">外酥內軟，明太子醬給得超大方！</p>
+            <p class="desc-text">外酥內軟，明太子醬給得超大方！</p>
             <div class="floor-row">
                 <div class="floor-desc"><b>博多店</b> (運河城旁)<br>就在運河城與櫛田神社中間。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Hakata" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Hakata" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
             <div class="floor-row">
                 <div class="floor-desc"><b>天神店</b><br>位於天神商圈。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Tenjin" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Tenjin" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -362,10 +207,10 @@
             <span>🥩 燒肉處 石原牛 (中洲)</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">鹿兒島產幻之和牛「石原牛」，全日本只有這裡吃得到。</p>
+            <p class="desc-text">鹿兒島產幻之和牛「石原牛」，全日本只有這裡吃得到。</p>
             <div class="floor-row">
                 <div class="floor-desc"><b>博多 Riverain 店</b> (1F)<br>午餐CP值高，晚餐為頂級燒肉。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Yakiniku+Dokoro+Ishihara+Gyu+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=石原牛" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -375,14 +220,14 @@
             <span>🍖 敘敘苑 (頂級燒肉)</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">無雷的高級燒肉，景觀好、服務佳。</p>
+            <p class="desc-text">無雷的高級燒肉，景觀好、服務佳。</p>
             <div class="floor-row">
                 <div class="floor-desc"><b>KITTE 博多店</b> (10F)<br>就在博多車站旁，交通最方便。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=敘敘苑+KITTE博多" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
             <div class="floor-row">
                 <div class="floor-desc"><b>天神岩田屋店</b> (本館 7F)<br>位於天神商圈中心。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+Tenjin+Iwataya" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=敘敘苑+天神" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -392,14 +237,14 @@
             <span>🍤 天麩羅處 hirao</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">福岡靈魂美食！<b>免費的「柚子花枝」小菜</b>超級好吃。</p>
+            <p class="desc-text">福岡靈魂美食！<b>免費的「柚子花枝」小菜</b>超級好吃。</p>
             <div class="floor-row">
                 <div class="floor-desc"><b>大名店</b> (天神)<br>逛街最順路，位於天神西通附近。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Daimyo" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=天麩羅处ひらお+大名" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
              <div class="floor-row">
                 <div class="floor-desc"><b>ACROS 店</b> (天神地下)<br>ACROS 福岡地下2樓。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Acros" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=天麩羅处ひらお+アクロス" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -409,18 +254,18 @@
             <span>🍜 Shin Shin 拉麵</span> <i class="fas fa-chevron-down arrow"></i>
         </div>
         <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">博多純情拉麵，麵條極細，湯頭濃郁帶甜。</p>
+            <p class="desc-text">博多純情拉麵，麵條極細，湯頭濃郁帶甜。</p>
             <div class="floor-row">
                 <div class="floor-desc"><b>天神本店</b><br>朝聖必去，排隊人潮較多。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+Tenjin+Main+Store" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+天神本店" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
             <div class="floor-row">
                 <div class="floor-desc"><b>KITTE 博多店</b> (B1)<br>位置便利，地下美食街。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+KITTE博多" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
              <div class="floor-row">
                 <div class="floor-desc"><b>PARCO 店</b> (B1)<br>天神 PARCO 地下。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+PARCO" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+PARCO" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -432,11 +277,11 @@
         <div class="dept-body">
             <div class="floor-row">
                 <div class="floor-desc"><b>本社總本店</b> (中洲)<br>整棟樓掛燈籠，24小時營業。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Main+Office" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=一蘭+本社総本店" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
             <div class="floor-row">
                 <div class="floor-desc"><b>博多運河城店</b> (B1)<br>全日本唯一的「方碗」。</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Canal+City" target="_blank" class="brand-map-link">導航去</a>
+                <a href="https://www.google.com/maps/search/?api=1&query=一蘭+キャナルシティ博多" target="_blank" class="brand-map-link">📍 導航去</a>
             </div>
         </div>
     </div>
@@ -461,7 +306,7 @@
             <div class="floor-row"><div class="floor-num">2F</div><div class="floor-desc"><span class="highlight">UNIQLO</span></div></div>
             <div class="floor-row"><div class="floor-num">1F</div><div class="floor-desc"><span class="highlight">UNIQLO</span>、JINS 眼鏡、咖啡</div></div>
             <div class="floor-row"><div class="floor-num">B1</div><div class="floor-desc"><span class="highlight">3COINS+plus</span>、藥妝店、超市、速食</div></div>
-            <a href="https://www.google.com/maps/search/?api=1&query=Mina+Tenjin+Fukuoka" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Mina+Tenjin" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
         </div>
     </div>
 
@@ -476,7 +321,7 @@
             <div class="floor-row"><div class="floor-num">本5F</div><div class="floor-desc">Francfranc、LUSH</div></div>
             <div class="floor-row"><div class="floor-num">本B1</div><div class="floor-desc">Disney Store</div></div>
             <div class="floor-row"><div class="floor-num">新B1</div><div class="floor-desc">Cocokara Fine 藥妝店</div></div>
-            <a href="https://www.google.com/maps/search/?api=1&query=Fukuoka+PARCO" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=Fukuoka+Parco" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
         </div>
     </div>
 
@@ -489,7 +334,7 @@
             <div class="floor-row"><div class="floor-num">6F</div><div class="floor-desc"><span class="highlight">無印良品 MUJI</span></div></div>
             <div class="floor-row"><div class="floor-num">5F</div><div class="floor-desc">Disney Store</div></div>
             <div class="floor-row"><div class="floor-num">1-5F</div><div class="floor-desc">Hands (台隆手創館)</div></div>
-            <a href="https://www.google.com/maps/search/?api=1&query=JR+Hakata+City+Amu+Plaza" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
+            <a href="https://www.google.com/maps/search/?api=1&query=AMU+PLAZA+Hakata" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
         </div>
     </div>
 
@@ -554,142 +399,145 @@
 <div id="schedule" class="content-section active">
     <div class="day-badge">Day 1 | 1/19 (一)</div>
     <div class="timeline-item">
-        <div style="font-weight:bold;">10:00 抵達福岡機場</div>
-        <div style="font-size:0.85rem; color:#666; margin-top:5px;">🚇 地鐵空港線：福岡空港 → 天神 (約11分)</div>
+        <div class="timeline-title">10:00 抵達福岡機場</div>
+        <div class="timeline-desc">🚇 地鐵空港線：福岡空港 → 天神 (約11分)</div>
     </div>
-    <a href="https://maps.google.com/?q=Comfort+Inn+Fukuoka+Tenjin" target="_blank" style="text-decoration:none; color:inherit;">
+    <a href="https://www.google.com/maps/search/?api=1&query=Comfort+Inn+Fukuoka+Tenjin" target="_blank" class="card-link">
         <div class="card">
-            <div style="font-weight:bold; color:var(--forest); margin-bottom:5px;"><i class="fas fa-hotel"></i> Comfort Inn Fukuoka Tenjin</div>
-            <div style="font-size:0.9rem;">寄放行李、Check-in。</div>
+            <div class="card-title"><i class="fas fa-hotel"></i> Comfort Inn Fukuoka Tenjin</div>
+            <div class="card-text">寄放行李、Check-in。</div>
         </div>
     </a>
     <div class="timeline-item">
-        <div style="font-weight:bold;">下午：天神商圈</div>
-        <div style="font-size:0.85rem; margin-top:5px;">
+        <div class="timeline-title">下午：天神商圈</div>
+        <div class="timeline-desc">
             mina天神、地下街、PARCO <br>
-            <span style="color:var(--olive); font-size:0.8rem;">(詳情請見「市區」分頁)</span>
+            <span class="note-text">(詳情請見「市區」分頁)</span>
         </div>
     </div>
 
     <div class="day-badge">Day 2 | 1/20 (二)</div>
-    <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮&query_place_id=ChIJzfvrKp-bQTURl65fp6vRJLg" target="_blank" style="text-decoration:none; color:inherit;">
-        <div class="card" style="border-left: 4px solid var(--forest);">
-            <div style="font-weight:bold; color:var(--forest);"><i class="fas fa-torii-gate"></i> 上午：太宰府天滿宮</div>
-            <div style="font-size:0.9rem; margin-top:5px;">西鐵電車前往，吃梅枝餅。</div>
+    <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮" target="_blank" class="card-link">
+        <div class="card card-forest-border">
+            <div class="card-title-forest"><i class="fas fa-torii-gate"></i> 上午：太宰府天滿宮</div>
+            <div class="card-text">西鐵電車前往，吃梅枝餅。</div>
         </div>
     </a>
-    <a href="https://www.google.com/maps/search/?api=1&query=博多丸井OIOI百貨&query_place_id=ChIJvUtJb7iRQTURBIy9sCktfDM" target="_blank" style="text-decoration:none; color:inherit;">
-        <div class="card" style="border-left: 4px solid #D35400;">
-            <div style="font-weight:bold; color:#D35400;"><i class="fas fa-ticket-alt"></i> 13:30 原畫展 (已購票)</div>
-            <div style="font-size:0.9rem; margin-top:5px;">地點：博多マルイ (0101) 5F</div>
+    <a href="https://www.google.com/maps/search/?api=1&query=博多マルイ" target="_blank" class="card-link">
+        <div class="card card-orange-border">
+            <div class="card-title-orange"><i class="fas fa-ticket-alt"></i> 13:30 原畫展 (已購票)</div>
+            <div class="card-text">地點：博多マルイ (0101) 5F</div>
         </div>
     </a>
 
     <div class="day-badge">Day 3 | 1/21 (三)</div>
     <div class="timeline-item">
-        <div style="font-weight:bold;">12:25 搭巴士往由布院</div>
-        <div style="font-size:0.85rem;">天神高速巴士總站 3F</div>
+        <div class="timeline-title">12:25 搭巴士往由布院</div>
+        <div class="timeline-desc">天神高速巴士總站 3F</div>
     </div>
     <div class="timeline-item">
-        <div style="font-weight:bold;">14:59 抵達由布院</div>
-        <div style="font-size:0.85rem;">建議使用車站行李配送到飯店</div>
+        <div class="timeline-title">14:59 抵達由布院</div>
+        <div class="timeline-desc">建議使用車站行李配送到飯店</div>
     </div>
-    <a href="https://www.google.com/maps/search/?api=1&query=由布院+UBL飯店&query_place_id=ChIJ1aYLJGOuRjURMRVuL8rp2Fg" target="_blank" style="text-decoration:none; color:inherit;">
+    <a href="https://www.google.com/maps/search/?api=1&query=由布院UBL" target="_blank" class="card-link">
         <div class="card">
-            <div style="font-weight:bold; color:var(--forest);"><i class="fas fa-hot-tub"></i> 住宿：由布院 UBL</div>
-            <div style="font-size:0.9rem;">16:30 車站前搭接駁車</div>
+            <div class="card-title"><i class="fas fa-hot-tub"></i> 住宿：由布院 UBL</div>
+            <div class="card-text">16:30 車站前搭接駁車</div>
         </div>
     </a>
 
     <div class="day-badge">Day 4 | 1/22 (四)</div>
     <div class="card">
-        <div style="font-weight:bold; color:var(--forest);">😴 睡飽飽 & 散步</div>
-        <div style="font-size:0.9rem;">享受溫泉早餐，退房後逛湯之坪或金鱗湖。</div>
+        <div class="card-title">😴 睡飽飽 & 散步</div>
+        <div class="card-text">享受溫泉早餐，退房後逛湯之坪或金鱗湖。</div>
     </div>
     <div class="timeline-item">
-        <div style="font-weight:bold;">15:00 搭巴士回博多</div>
-        <div style="font-size:0.85rem;">由布院站前巴士中心</div>
+        <div class="timeline-title">15:00 搭巴士回博多</div>
+        <div class="timeline-desc">由布院站前巴士中心</div>
     </div>
-    <a href="https://www.google.com/maps/search/?api=1&query=天然溫泉袖湊之湯+Dormy+Inn+PREMIUM+博多・運河城前&query_place_id=ChIJJ1j4y7-RQTUR3dJDzin0iQY" target="_blank" style="text-decoration:none; color:inherit;">
+    <a href="https://www.google.com/maps/search/?api=1&query=Dormy+Inn+Premium+Hakata+Canal+City" target="_blank" class="card-link">
         <div class="card">
-            <div style="font-weight:bold; color:var(--forest);"><i class="fas fa-bed"></i> 住宿：Dormy Inn Premium</div>
-            <div style="font-size:0.9rem;">博多運河城前 (有免費拉麵宵夜)</div>
+            <div class="card-title"><i class="fas fa-bed"></i> 住宿：Dormy Inn Premium</div>
+            <div class="card-text">博多運河城前 (有免費拉麵宵夜)</div>
         </div>
     </a>
 
     <div class="day-badge">Day 5 | 1/23 (五)</div>
     <div class="timeline-item">
-        <div style="font-weight:bold;">最後採買 & 機場</div>
-        <div style="font-size:0.85rem;">JR Hakata City / 天神</div>
+        <div class="timeline-title">最後採買 & 機場</div>
+        <div class="timeline-desc">JR Hakata City / 天神</div>
     </div>
     <div class="timeline-item">
-        <div style="font-weight:bold; color:#D35400;">20:30 飛機起飛</div>
-        <div style="font-size:0.85rem;">建議 18:00 抵達機場</div>
+        <div class="timeline-title orange-text">20:30 飛機起飛</div>
+        <div class="timeline-desc">建議 18:00 抵達機場</div>
     </div>
 </div>
 
 <div id="transport" class="content-section">
     <div class="transport-box">
-        <h3 style="margin:0 0 10px;">Day 1: 機場 → 天神</h3>
-        <p style="margin:0; font-size:0.9rem;"><b>地鐵空港線</b><br>福岡空港站 ➔ 天神站 (約11分)<br>從12號出口(有電梯)步行至飯店。</p>
+        <h3>Day 1: 機場 → 天神</h3>
+        <p><b>地鐵空港線</b><br>福岡空港站 ➔ 天神站 (約11分)<br>從12號出口(有電梯)步行至飯店。</p>
     </div>
-    <div class="transport-box" style="background:var(--forest);">
-        <h3 style="margin:0 0 10px;">Day 3: 往由布院</h3>
-        <p style="margin:0; font-size:0.9rem;"><b>西鐵高速巴士</b><br>12:25 天神高速BT (3F) ➔ 14:59 由布院駅前</p>
-        <a href="https://www.google.com/maps/search/?api=1&query=Nishitetsu+Tenjin+Expressway+Bus+Terminal&query_place_id=ChIJAWL664-RQTUR5TSegARpGQs" target="_blank" style="color:var(--pale); display:block; margin-top:10px;">📍 導航上車點</a>
+    <div class="transport-box box-forest">
+        <h3>Day 3: 往由布院</h3>
+        <p><b>西鐵高速巴士</b><br>12:25 天神高速BT (3F) ➔ 14:59 由布院駅前</p>
+        <a href="https://www.google.com/maps/search/?api=1&query=西鉄天神高速バスターミナル" target="_blank" class="box-link">📍 導航上車點</a>
     </div>
-    <div class="transport-box" style="background:var(--moss);">
-        <h3 style="margin:0 0 10px;">Day 4: 回博多</h3>
-        <p style="margin:0; font-size:0.9rem;"><b>西鐵高速巴士</b><br>15:00 由布院駅前BC ➔ 16:55 博多BT</p>
+    <div class="transport-box box-moss">
+        <h3>Day 4: 回博多</h3>
+        <p><b>西鐵高速巴士</b><br>15:00 由布院駅前BC ➔ 16:55 博多BT</p>
     </div>
     <div class="transport-box">
-        <h3 style="margin:0 0 10px;">博多車站 → 飯店</h3>
-        <p style="margin:0; font-size:0.9rem;"><b>建議搭計程車</b> (約¥1000)<br>或步行約10-15分鐘</p>
+        <h3>博多車站 → 飯店</h3>
+        <p><b>建議搭計程車</b> (約¥1000)<br>或步行約10-15分鐘</p>
     </div>
 </div>
 
 <div id="yufuin" class="content-section">
-    <div style="text-align:center; padding-bottom:20px; color:var(--forest);">
+    <div class="yufuin-header">
         <b>湯之坪街道散策</b><br>
         <small>Start: 車站 ➡ End: 金鱗湖</small>
     </div>
-    <div style="position:relative; max-width:400px; margin:0 auto;">
-        <div style="position:absolute; left:50%; top:0; bottom:0; width:4px; background:var(--olive); transform:translateX(-50%);"></div>
+    <div class="yufuin-container">
+        <div class="street-line"></div>
         
-        <div style="position:relative; margin-bottom:30px; display:flex; justify-content:center;">
-            <a href="https://maps.google.com/?q=Yufuin+Station" target="_blank" style="background:var(--forest); color:white; padding:8px 15px; border-radius:20px; text-decoration:none; z-index:1;">🚉 由布院車站</a>
+        <div class="map-node">
+            <a href="https://www.google.com/maps/search/?api=1&query=由布院駅" target="_blank" class="node-station">🚉 由布院車站</a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px;">
-            <a href="https://www.google.com/maps/search/?api=1&query=蛋糕卷+B+SPEAK+本店&query_place_id=ChIJO7RnQNetRjUR0hEidDDEOvo" target="_blank" style="display:block; width:45%; margin-left:5px; background:white; padding:8px; border-radius:8px; border-left:4px solid var(--forest); text-decoration:none; color:var(--dark); box-shadow:0 2px 5px rgba(0,0,0,0.1);">🍰 B-speak <br><small>必買蛋糕卷</small></a>
+        <div class="map-row-left">
+            <a href="https://www.google.com/maps/search/?api=1&query=B-speak" target="_blank" class="node-card border-forest">🍰 B-speak <br><small>必買蛋糕卷</small></a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px; text-align:right;">
-            <a href="https://maps.google.com/?q=Donguri+no+Mori+Yufuin" target="_blank" style="display:inline-block; width:45%; margin-right:5px; background:white; padding:8px; border-radius:8px; border-right:4px solid var(--moss); text-decoration:none; color:var(--dark); text-align:left; box-shadow:0 2px 5px rgba(0,0,0,0.1);">🐱 吉卜力專賣店</a>
+        <div class="map-row-right">
+            <a href="https://www.google.com/maps/search/?api=1&query=Yufuin+Donguri+no+Mori" target="_blank" class="node-card border-moss">🐱 吉卜力專賣店</a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px;">
-            <a href="https://maps.google.com/?q=Milch+Yufuin" target="_blank" style="display:block; width:45%; margin-left:5px; background:white; padding:8px; border-radius:8px; border-left:4px solid var(--forest); text-decoration:none; color:var(--dark); box-shadow:0 2px 5px rgba(0,0,0,0.1);">🧀 Milch 起司</a>
+        <div class="map-row-left">
+            <a href="https://www.google.com/maps/search/?api=1&query=Milch+Yufuin" target="_blank" class="node-card border-forest">🧀 Milch 起司</a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px; text-align:right;">
-            <a href="https://www.google.com/maps/search/?api=1&query=金賞可樂餅+本店&query_place_id=ChIJaadjbX6uRjURi_pn3I7qpwM" target="_blank" style="display:inline-block; width:45%; margin-right:5px; background:white; padding:8px; border-radius:8px; border-right:4px solid var(--moss); text-decoration:none; color:var(--dark); text-align:left; box-shadow:0 2px 5px rgba(0,0,0,0.1);">🥔 金賞可樂餅</a>
+        <div class="map-row-right">
+            <a href="https://www.google.com/maps/search/?api=1&query=Gold+Award+Croquette" target="_blank" class="node-card border-moss">🥔 金賞可樂餅</a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px;">
-            <a href="https://www.google.com/maps/search/?api=1&query=史奴比茶屋&query_place_id=ChIJg8kh-H6uRjURISKPf0GgqKI" target="_blank" style="display:block; width:45%; margin-left:5px; background:white; padding:8px; border-radius:8px; border-left:4px solid var(--forest); text-decoration:none; color:var(--dark); box-shadow:0 2px 5px rgba(0,0,0,0.1);">🐶 Snoopy 茶屋</a>
+        <div class="map-row-left">
+            <a href="https://www.google.com/maps/search/?api=1&query=Snoopy+Chaya+Yufuin" target="_blank" class="node-card border-forest">🐶 Snoopy 茶屋</a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px; text-align:right;">
-            <a href="https://www.google.com/maps/search/?api=1&query=湯布院花卉村&query_place_id=ChIJWax-bn6uRjUReLLmqHrObCU" target="_blank" style="display:inline-block; width:45%; margin-right:5px; background:white; padding:8px; border-radius:8px; border-right:4px solid var(--moss); text-decoration:none; color:var(--dark); text-align:left; box-shadow:0 2px 5px rgba(0,0,0,0.1);">🍄 花卉村</a>
+        <div class="map-row-right">
+            <a href="https://www.google.com/maps/search/?api=1&query=Yufuin+Floral+Village" target="_blank" class="node-card border-moss">🍄 花卉村</a>
+        </div>
+        
+         <div class="map-row-left">
+            <a href="https://www.google.com/maps/search/?api=1&query=Yufuin+Stained+Glass+Museum" target="_blank" class="node-card border-forest">🖼️ 花窗玻璃美術館 <br><small>歐式復古風</small></a>
         </div>
 
-        <div style="position:relative; margin-bottom:30px; display:flex; justify-content:center;">
-            <a href="https://www.google.com/maps/search/?api=1&query=金鱗湖&query_place_id=ChIJa7QFnn2uRjUR5ofN82Ctd44" target="_blank" style="background:#3498db; color:white; padding:8px 15px; border-radius:20px; text-decoration:none; z-index:1;">🌊 金鱗湖</a>
+        <div class="map-node">
+            <a href="https://www.google.com/maps/search/?api=1&query=Kinrin+Lake" target="_blank" class="node-lake">🌊 金鱗湖</a>
         </div>
     </div>
 </div>
-
 
 <script>
     function switchTab(tabId, btn) {
@@ -711,9 +559,9 @@
         'uniqlo': {
             title: '🔴 UNIQLO 哪裡有？',
             locations: [
-                {name: 'Mina 天神', floor: '1F / 2F (大型店)', link: 'https://www.google.com/maps/search/?api=1&query=Mina+Tenjin'},
-                {name: 'KITTE 博多', floor: '8F', link: 'https://www.google.com/maps/search/?api=1&query=KITTE+Hakata'},
-                {name: '博多運河城', floor: '1F (North Bldg)', link: 'https://www.google.com/maps/search/?api=1&query=UNIQLO+Canal+City'}
+                {name: 'Mina 天神', floor: '1F / 2F (大型店)', link: 'https://www.google.com/maps/search/?api=1&query=UNIQLO+Mina+Tenjin'},
+                {name: 'KITTE 博多', floor: '8F', link: 'https://www.google.com/maps/search/?api=1&query=UNIQLO+KITTE+Hakata'},
+                {name: '博多運河城', floor: '1F (North Bldg)', link: 'https://www.google.com/maps/search/?api=1&query=UNIQLO+Canal+City+Hakata'}
             ]
         },
         'gu': {
@@ -726,15 +574,15 @@
         'muji': {
             title: '🟤 無印良品 哪裡有？',
             locations: [
-                {name: 'AMU PLAZA (博多)', floor: '6F', link: 'https://www.google.com/maps/search/?api=1&query=MUJI+Amu+Plaza+Hakata'},
-                {name: '博多運河城', floor: '3F-4F (超大型)', link: 'https://www.google.com/maps/search/?api=1&query=MUJI+Canal+City'}
+                {name: 'AMU PLAZA (博多)', floor: '6F', link: 'https://www.google.com/maps/search/?api=1&query=MUJI+AMU+PLAZA+Hakata'},
+                {name: '博多運河城', floor: '3F-4F (超大型)', link: 'https://www.google.com/maps/search/?api=1&query=MUJI+Canal+City+Hakata'}
             ]
         },
         '3coins': {
             title: '🟢 3COINS 哪裡有？',
             locations: [
                 {name: 'Mina 天神', floor: 'B1 (3COINS+plus)', link: 'https://www.google.com/maps/search/?api=1&query=3COINS+Mina+Tenjin'},
-                {name: 'AMU EST (博多)', floor: '1F', link: 'https://www.google.com/maps/search/?api=1&query=3COINS+Hakata+Station'}
+                {name: 'AMU EST (博多)', floor: '1F', link: 'https://www.google.com/maps/search/?api=1&query=3COINS+AMU+EST+Hakata'}
             ]
         },
         '100yen': {
@@ -763,9 +611,9 @@
         'drug': {
             title: '💊 藥妝店',
             locations: [
-                {name: 'Cocokara Fine', floor: 'PARCO 新館 B1', link: 'https://www.google.com/maps/search/?api=1&query=Cocokarafine+Parco'},
+                {name: 'Cocokara Fine', floor: 'PARCO 新館 B1', link: 'https://www.google.com/maps/search/?api=1&query=Cocokara+Fine+Parco+Fukuoka'},
                 {name: '松本清', floor: 'Mina 天神 B1', link: 'https://www.google.com/maps/search/?api=1&query=Matsumoto+Kiyoshi+Mina+Tenjin'},
-                {name: '大國藥妝', floor: '天神地下街/博多筑紫口', link: 'https://www.google.com/maps/search/?api=1&query=Daikoku+Drug+Tenjin'}
+                {name: '大國藥妝', floor: '天神地下街/博多筑紫口', link: 'https://www.google.com/maps/search/?api=1&query=Daikoku+Drug+Fukuoka'}
             ]
         }
     };
