@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026福岡之旅 🌿</title>
+    <title>福岡由布院．森之旅 🌿</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         /* --- 森林系色票 --- */
         :root {
-            --dark: #132A13;
-            --forest: #31572C;
-            --moss: #4F772D;
-            --olive: #90A955;
-            --pale: #ECF39E;
-            --paper: #F9F9F7;
+            --dark: #132A13;       /* 深綠：文字、重點 */
+            --forest: #31572C;     /* 森林綠：標題、按鈕 */
+            --moss: #4F772D;       /* 苔綠：次要元素 */
+            --olive: #90A955;      /* 橄欖綠：裝飾、線條 */
+            --pale: #ECF39E;       /* 嫩綠：背景亮部 */
+            --paper: #F9F9F7;      /* 米白：模擬紙張背景 */
             --white: #ffffff;
-            --red: #D35400; /* 重點標示用 */
+            --red: #D35400;        /* 重點標示用 */
+            --meat: #A93226;       /* 肉類料理專用色 */
         }
 
         body {
@@ -81,7 +82,7 @@
         .brand-btn:active { background: var(--pale); transform: scale(0.95); }
         .brand-btn i { font-size: 1.2rem; margin-bottom: 5px; color: var(--moss); }
 
-        /* --- 百貨折疊卡片 --- */
+        /* --- 百貨/餐廳折疊卡片 --- */
         .dept-card {
             background: var(--white);
             border-radius: 12px;
@@ -90,6 +91,9 @@
             overflow: hidden;
             border-left: 5px solid var(--forest);
         }
+        /* 餐廳專用卡片樣式 */
+        .food-card { border-left-color: var(--meat); }
+        
         .dept-header {
             padding: 15px;
             display: flex;
@@ -116,14 +120,16 @@
             padding: 8px 0;
             border-bottom: 1px solid #eee;
             font-size: 0.9rem;
+            align-items: center;
         }
         .floor-num {
-            width: 40px;
+            width: 50px;
             font-weight: bold;
             color: var(--moss);
             flex-shrink: 0;
+            font-size: 0.8rem;
         }
-        .floor-desc { color: #555; line-height: 1.4; }
+        .floor-desc { color: #555; line-height: 1.4; flex-grow: 1; }
         .highlight { color: var(--red); font-weight: bold; }
 
         .map-btn-full {
@@ -137,6 +143,18 @@
             font-size: 0.9rem;
             margin-top: 10px;
             border-radius: 6px;
+        }
+
+        .brand-map-link {
+            display: inline-block;
+            background: var(--paper);
+            border: 1px solid var(--olive);
+            color: var(--forest);
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            white-space: nowrap;
         }
 
         /* --- Modal 彈窗 --- */
@@ -182,16 +200,6 @@
         }
         .brand-shop-name { font-weight: bold; font-size: 1rem; margin-bottom: 4px; }
         .brand-floor { color: var(--moss); font-size: 0.9rem; margin-bottom: 8px; }
-        .brand-map-link {
-            display: inline-block;
-            background: var(--paper);
-            border: 1px solid var(--olive);
-            color: var(--forest);
-            padding: 4px 10px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-size: 0.8rem;
-        }
 
         /* --- 底部導航 --- */
         .nav-bar {
@@ -237,11 +245,11 @@
             border-radius: 4px;
         }
 
-        /* --- 由布院地圖 & 行程表 CSS (保留原樣) --- */
+        /* --- 由布院地圖 & 行程表 CSS --- */
         .timeline-item { padding-left: 20px; border-left: 2px dashed var(--olive); margin-left: 10px; padding-bottom: 20px; position: relative; }
         .timeline-item::before { content: ''; position: absolute; left: -6px; top: 0; width: 10px; height: 10px; background: var(--pale); border: 2px solid var(--forest); border-radius: 50%; }
         .day-badge { background: var(--forest); color: var(--pale); padding: 5px 15px; border-radius: 4px; font-weight: bold; margin: 30px 0 10px; box-shadow: 3px 3px 0px var(--olive); display: inline-block;}
-        .card { background: var(--white); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        .card { background: var(--white); border-radius: 12px; padding: 15px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(144, 169, 85, 0.2); }
         .transport-box { background: var(--dark); color: white; border-radius: 15px; padding: 15px; margin-bottom: 15px; }
     </style>
 </head>
@@ -271,6 +279,110 @@
         <div class="brand-btn" onclick="openModal('game')"><i class="fas fa-gamepad"></i>遊戲/任天堂</div>
         <div class="brand-btn" onclick="openModal('pokemon')"><i class="fas fa-bolt"></i>寶可夢</div>
         <div class="brand-btn" onclick="openModal('drug')"><i class="fas fa-pills"></i>藥妝店</div>
+    </div>
+
+    <div class="section-header">必吃美食地圖</div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🥩 燒肉處 石原牛 (中洲)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">鹿兒島產幻之和牛「石原牛」，全日本只有這裡吃得到（其他都外銷）。中洲川端站旁。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>博多 Riverain 店</b> (1F)<br>午餐CP值高，晚餐為頂級燒肉。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Yakiniku+Dokoro+Ishihara+Gyu+Fukuoka" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍖 敘敘苑 (頂級燒肉)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">無雷的高級燒肉，景觀好、服務佳，商業午餐最划算。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>KITTE 博多店</b> (10F)<br>就在博多車站旁，交通最方便。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>天神岩田屋店</b> (本館 7F)<br>位於天神商圈中心。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Jojoen+Tenjin+Iwataya" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍤 天麩羅處 hirao (平價天婦羅)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">福岡靈魂美食！現炸天婦羅一道道上菜，<b>免費的「柚子花枝」小菜</b>超級好吃。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>大名店</b> (天神區域)<br>逛街最順路，位於天神西通附近。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Daimyo" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+             <div class="floor-row">
+                <div class="floor-desc"><b>ACROS 店</b> (天神地下)<br>ACROS 福岡地下2樓。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Tempura+Hirao+Acros" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍜 Shin Shin 拉麵</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">博多純情拉麵，麵條極細，湯頭濃郁帶甜，許多藝人(如東方神起)愛店。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>天神本店</b><br>朝聖必去，排隊人潮較多。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+Tenjin+Main+Store" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>KITTE 博多店</b> (B1)<br>位置便利，地下美食街。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+KITTE+Hakata" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+             <div class="floor-row">
+                <div class="floor-desc"><b>PARCO 店</b> (B1)<br>天神 PARCO 地下。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=ShinShin+Ramen+PARCO" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🍜 一蘭拉麵</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">福岡是發源地，總本店有掛燈籠。</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>本社總本店</b> (中洲)<br>特色：整棟樓掛燈籠，24小時營業。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Main+Office" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>博多運河城店</b> (B1)<br>特色：全日本唯一的「方碗」。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Canal+City" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card food-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🥖 明太子法國麵包 (Full Full)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p style="margin:10px 0; font-size:0.9rem;">外酥內軟，明太子醬給得超大方！</p>
+            <div class="floor-row">
+                <div class="floor-desc"><b>博多店</b> (運河城旁)<br>就在運河城與櫛田神社中間。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Hakata" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+            <div class="floor-row">
+                <div class="floor-desc"><b>天神店</b><br>位於天神商圈。</div>
+                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Tenjin" target="_blank" class="brand-map-link">導航去</a>
+            </div>
+        </div>
     </div>
 
     <div class="section-header">百貨樓層攻略 (點擊展開)</div>
@@ -370,48 +482,11 @@
             <a href="https://www.google.com/maps/search/?api=1&query=Yodobashi+Hakata" target="_blank" class="map-btn-full">🗺️ 開啟 Google Map</a>
         </div>
     </div>
-
-    <div class="section-header">必吃美食</div>
-    
-    <div class="dept-card">
-        <div class="dept-header" onclick="toggleDept(this)">
-            <span>🍜 一蘭拉麵</span> <i class="fas fa-chevron-down arrow"></i>
-        </div>
-        <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">福岡是發源地，分店眾多。</p>
-            <div class="floor-row">
-                <div class="floor-desc"><b>本社總本店</b> (運河城附近)<br>特色：有掛燈籠，24小時營業</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Main+Office" target="_blank" class="brand-map-link" style="margin-left:auto;">導航</a>
-            </div>
-            <div class="floor-row">
-                <div class="floor-desc"><b>博多運河城店</b><br>特色：特製方碗 (B1)</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Ichiran+Canal+City" target="_blank" class="brand-map-link" style="margin-left:auto;">導航</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="dept-card">
-        <div class="dept-header" onclick="toggleDept(this)">
-            <span>🥖 明太子法國麵包 (Full Full)</span> <i class="fas fa-chevron-down arrow"></i>
-        </div>
-        <div class="dept-body">
-            <p style="margin:10px 0; font-size:0.9rem;">排隊名店，明太子法國麵包必吃！</p>
-            <div class="floor-row">
-                <div class="floor-desc"><b>Full Full 博多店</b> (運河城附近)<br>就在運河城與櫛田神社旁</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Hakata" target="_blank" class="brand-map-link" style="margin-left:auto;">導航</a>
-            </div>
-            <div class="floor-row">
-                <div class="floor-desc"><b>Full Full 天神店</b><br>位於天神商圈</div>
-                <a href="https://www.google.com/maps/search/?api=1&query=Full+Full+Tenjin" target="_blank" class="brand-map-link" style="margin-left:auto;">導航</a>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <div id="modalOverlay" class="modal-overlay" onclick="closeModal()">
     <div class="modal-box" onclick="event.stopPropagation()">
-        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <span class="modal-close" onclick="closeModal()">×</span>
         <div id="modalContent"></div>
     </div>
 </div>
