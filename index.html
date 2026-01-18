@@ -25,6 +25,8 @@
     
     <div class="search-label">🔍 品牌快搜</div>
     <div class="brand-grid">
+        <div class="brand-btn" onclick="openModal('montbell')"><i class="fas fa-mountain"></i>Mont-bell</div>
+        <div class="brand-btn" onclick="openModal('alpen')"><i class="fas fa-campground"></i>Alpen</div>
         <div class="brand-btn" onclick="openModal('uniqlo')"><i class="fas fa-tshirt"></i>UNIQLO</div>
         <div class="brand-btn" onclick="openModal('gu')"><i class="fas fa-vest"></i>GU</div>
         <div class="brand-btn" onclick="openModal('muji')"><i class="fas fa-leaf"></i>無印良品</div>
@@ -33,6 +35,43 @@
         <div class="brand-btn" onclick="openModal('game')"><i class="fas fa-gamepad"></i>遊戲/任天堂</div>
         <div class="brand-btn" onclick="openModal('pokemon')"><i class="fas fa-bolt"></i>寶可夢</div>
         <div class="brand-btn" onclick="openModal('drug')"><i class="fas fa-pills"></i>藥妝店</div>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="section-header">⛰️ 戶外與運動聖地</div>
+
+    <div class="dept-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🏕️ Alpen FUKUOKA (九州最大)</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">位於博多運河城南館，九州規模最大的旗艦店，戶外迷必逛！</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>3F Alpen Outdoors：</b>露營用品 (Snow Peak, Coleman)、The North Face、Patagonia。<br>
+                    <b>2F Sports Depo：</b>球類運動、跑步 (Nike, Adidas)。<br>
+                    <b>1F Golf 5：</b>高爾夫專區。
+                </div>
+                <a href="https://www.google.com/maps" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="dept-card">
+        <div class="dept-header" onclick="toggleDept(this)">
+            <span>🏔️ Mont-bell 天神店</span> <i class="fas fa-chevron-down arrow"></i>
+        </div>
+        <div class="dept-body">
+            <p class="desc-text">日本國民戶外品牌，天神店為獨立路面店，商品齊全。</p>
+            <div class="floor-row">
+                <div class="floor-desc">
+                    <b>位置：</b>天神商圈南側，距離警固神社不遠。<br>
+                    <b>特色：</b>除了登山裝備，輕羽絨、排汗衣也是必買。
+                </div>
+                <a href="https://www.google.com/search?q=https://www.google.com/maps/search/%3Fapi%3D1%26query%3DComfort%2BInn%2BFukuoka%2BTenjin%26query_place_id%3DChIJi6RV0Q2RQTURTE85NgyAX_Y" target="_blank" class="brand-map-link">📍 導航去</a>
+            </div>
+        </div>
     </div>
 
     <div class="section-divider"></div>
@@ -47,7 +86,7 @@
             <p class="desc-text">福岡最具代表性的神社，供奉學問之神。</p>
             <div class="floor-row">
                 <div class="floor-desc">
-                    <b>必看：</b>表參道商店街、隈研吾設計星巴克、御神牛、飛梅。<br>
+                    <b>必看：</b>表參道商店街、隈研吾設計星巴克、御神牛。<br>
                     <b>美食：</b>梅枝餅。
                 </div>
                 <a href="https://www.google.com/maps/search/?api=1&query=太宰府天滿宮" target="_blank" class="brand-map-link">📍 導航去</a>
@@ -554,8 +593,20 @@
         body.classList.toggle('show');
     }
 
-    // 品牌資料庫
+    // 品牌資料庫 (包含新加入的 Mont-bell 與 Alpen)
     const brandData = {
+        'montbell': {
+            title: '🏔️ Mont-bell 哪裡有？',
+            locations: [
+                {name: 'Mont-bell 天神店', floor: '路面店 (獨立店鋪)', link: 'https://www.google.com/search?q=https://www.google.com/maps/search/%3Fapi%3D1%26query%3DComfort%2BInn%2BFukuoka%2BTenjin%26query_place_id%3DChIJi6RV0Q2RQTURTE85NgyAX_Y'},
+            ]
+        },
+        'alpen': {
+            title: '🏕️ Alpen 哪裡有？',
+            locations: [
+                {name: 'Alpen FUKUOKA', floor: '博多運河城南館 1-3F', link: 'https://www.google.com/maps'},
+            ]
+        },
         'uniqlo': {
             title: '🔴 UNIQLO 哪裡有？',
             locations: [
